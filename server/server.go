@@ -7,8 +7,10 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/nathan-osman/sitemon/db"
+	"github.com/nathan-osman/sitemon/ui"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -47,6 +49,16 @@ func New(serverAddr, secretKey string, conn *db.Conn) *Server {
 		HttpOnly: true,
 	})
 
+	// Serve the static files from /
+	r.Use(
+		static.Serve(
+			"/",
+			ui.EmbedFileSystem{
+				FileSystem: http.FS(ui.Content),
+			},
+		),
+	)
+
 	groupApi := r.Group("/api")
 	{
 		// Use the session and our custom user middleware for the API
@@ -66,6 +78,13 @@ func New(serverAddr, secretKey string, conn *db.Conn) *Server {
 			groupAuthApi.POST("/logout", s.apiLogout)
 		}
 	}
+
+	// Serve the static files on all other paths too
+	r.NoRoute(func(c *gin.Context) {
+		c.Request.URL.Path = "/"
+		r.HandleContext(c)
+		c.Abort()
+	})
 
 	// Listen for connections in a separate goroutine
 	go func() {

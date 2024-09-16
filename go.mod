@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/gin-contrib/sessions v1.0.1
+	github.com/gin-contrib/static v1.1.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/rs/zerolog v1.33.0
 	github.com/urfave/cli/v2 v2.27.4

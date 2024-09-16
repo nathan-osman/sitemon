@@ -1,3 +1,20 @@
+FROM node:latest AS frontend
+
+WORKDIR /usr/src/app
+
+# Copy the package files
+COPY ui/package.json ui/package-lock.json ./
+
+# Install package requirements
+RUN npm install
+
+# Copy the remaining files
+COPY ui/ .
+
+# Build the application bundle
+RUN npm run build
+
+
 FROM golang:alpine AS backend
 
 WORKDIR /usr/src/app
@@ -16,6 +33,9 @@ RUN go mod download && go mod verify
 
 # Copy the remaining Go files
 COPY . .
+
+# Copy the UI files
+COPY --from=frontend /usr/src/app/dist/ ui/dist
 
 # Build the application
 RUN go build -ldflags '-linkmode external -extldflags "-static"'
