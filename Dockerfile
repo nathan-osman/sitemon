@@ -1,9 +1,12 @@
 FROM golang:alpine AS backend
 
+WORKDIR /usr/src/app
+
+# Enable cgo
+ENV CGO_ENABLED=1
+
 # Install ld and C runtime libraries
 RUN apk --no-cache add binutils musl-dev
-
-WORKDIR /usr/src/app
 
 # Copy the package files
 COPY go.mod go.sum ./
