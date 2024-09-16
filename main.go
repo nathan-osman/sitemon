@@ -34,7 +34,7 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:    "server-addr",
-				Value:   ":8000",
+				Value:   ":http",
 				EnvVars: []string{"SERVER_ADDR"},
 				Usage:   "HTTP address to listen on",
 			},
