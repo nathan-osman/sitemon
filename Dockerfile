@@ -24,7 +24,7 @@ RUN go build -ldflags '-linkmode external -extldflags "-static"'
 FROM scratch
 
 # Copy the application
-COPY --from=backend /usr/src/app/sitemon /usr/local/bin
+COPY --from=backend /usr/src/app/sitemon /usr/local/bin/
 
 # Download and install a cert bundle
 ADD https://curl.se/ca/cacert.pem /etc/ssl/certs/
