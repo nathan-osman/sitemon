@@ -5,8 +5,8 @@ WORKDIR /usr/src/app
 # Enable cgo
 ENV CGO_ENABLED=1
 
-# Install ld and C runtime libraries
-RUN apk --no-cache add binutils musl-dev
+# Install gcc and C runtime libraries
+RUN apk --no-cache add gcc musl-dev
 
 # Copy the package files
 COPY go.mod go.sum ./
