@@ -1,0 +1,6 @@
+/.git/
+/.gitignore
+/db.sqlite3
+/sitemon
+/sitemon.exe
+/README.md
