@@ -10,6 +10,7 @@ import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/nathan-osman/sitemon/db"
+	"github.com/nathan-osman/sitemon/monitor"
 	"github.com/nathan-osman/sitemon/ui"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -26,9 +27,10 @@ type Server struct {
 	server http.Server
 	logger zerolog.Logger
 	conn   *db.Conn
+	mon    *monitor.Monitor
 }
 
-func New(serverAddr, secretKey string, conn *db.Conn) *Server {
+func New(serverAddr, secretKey string, conn *db.Conn, mon *monitor.Monitor) *Server {
 
 	var (
 		r = gin.New()
@@ -39,6 +41,7 @@ func New(serverAddr, secretKey string, conn *db.Conn) *Server {
 			},
 			logger: log.With().Str("package", "server").Logger(),
 			conn:   conn,
+			mon:    mon,
 		}
 		store = cookie.NewStore([]byte(secretKey))
 	)

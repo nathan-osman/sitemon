@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/nathan-osman/sitemon/db"
+	"github.com/nathan-osman/sitemon/monitor"
 	"github.com/nathan-osman/sitemon/server"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/term"
@@ -100,11 +101,16 @@ func main() {
 			// Grab the database
 			conn := c.Context.Value(contextDB).(*db.Conn)
 
+			// Create the monitor
+			mon := monitor.New(conn)
+			defer mon.Close()
+
 			// Create the server
 			s := server.New(
 				c.String("server-addr"),
 				c.String("secret-key"),
 				conn,
+				mon,
 			)
 			defer s.Close()
 
