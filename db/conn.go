@@ -23,6 +23,8 @@ func New(dataDir string) (*Conn, error) {
 	}
 	if err := d.AutoMigrate(
 		&User{},
+		&Site{},
+		&Event{},
 	); err != nil {
 		return nil, err
 	}

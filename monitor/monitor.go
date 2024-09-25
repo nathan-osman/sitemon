@@ -1,6 +1,8 @@
 package monitor
 
 import (
+	"time"
+
 	"github.com/nathan-osman/sitemon/db"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -17,7 +19,33 @@ type Monitor struct {
 func (m *Monitor) run() {
 	defer close(m.closedChan)
 	for {
+		var (
+			sites []*db.Site
+			next  time.Time
+			now   = time.Now()
+		)
+		if err := m.conn.Where("enabled = ?", true).Find(&sites).Error; err != nil {
+			m.logger.Error().Msg(err.Error())
+			return
+		}
+		for _, s := range sites {
+			n := s.LastCheck.Add(s.Interval())
+			if n.Before(now) {
+				m.check(s, now)
+				n = n.Add(s.Interval())
+			}
+			if next.IsZero() || n.Before(next) {
+				next = n
+			}
+		}
+		var (
+			nextChan <-chan time.Time
+		)
+		if !next.IsZero() {
+			nextChan = time.After(next.Sub(now))
+		}
 		select {
+		case <-nextChan:
 		case _, ok := <-m.updateChan:
 			if !ok {
 				return
