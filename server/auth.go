@@ -18,9 +18,9 @@ func (s *Server) loadUser(c *gin.Context) {
 		sessionUserID = session.Get(sessionKeyUserID)
 	)
 	if sessionUserID != nil {
-		u := &db.User{}
-		if err := s.conn.First(u, sessionUserID).Error; err == nil {
-			c.Set(contextUser, u)
+		u := db.User{}
+		if err := s.conn.First(&u, sessionUserID).Error; err == nil {
+			c.Set(contextUser, &u)
 		}
 	}
 	c.Next()

@@ -14,12 +14,14 @@ type apiLoginParams struct {
 }
 
 func (s *Server) apiLogin(c *gin.Context) {
-	v := &apiLoginParams{}
-	if err := c.ShouldBindJSON(v); err != nil {
+	v := apiLoginParams{}
+	if err := c.ShouldBindJSON(&v); err != nil {
 		panic(err)
 	}
-	u := &db.User{}
-	if err := s.conn.Where("email = ?", v.Email).First(u).Error; err != nil {
+	u := db.User{}
+	if err := s.conn.
+		Where("email = ?", v.Email).
+		First(&u).Error; err != nil {
 		panic(err)
 	}
 	if err := u.Authenticate(v.Password); err != nil {
@@ -49,16 +51,16 @@ func (s *Server) apiSites(c *gin.Context) {
 
 func (s *Server) apiSitesId(c *gin.Context) {
 	var (
-		site = &db.Site{}
+		site = db.Site{}
 		conn = s.conn.DB
 	)
 	if !s.userIsLoggedIn(c) {
 		conn = conn.Where("public = ?", true)
 	}
-	if err := conn.First(site, c.Param("id")).Error; err != nil {
+	if err := conn.First(&site, c.Param("id")).Error; err != nil {
 		panic(err)
 	}
-	c.JSON(http.StatusOK, site)
+	c.JSON(http.StatusOK, &site)
 }
 
 func (s *Server) apiTest(c *gin.Context) {
@@ -75,31 +77,32 @@ func (s *Server) apiLogout(c *gin.Context) {
 }
 
 func (s *Server) apiSitesCreate(c *gin.Context) {
-	site := &db.Site{}
-	if err := c.ShouldBindJSON(s); err != nil {
+	siteWritable := db.SiteWritable{}
+	if err := c.ShouldBindJSON(&siteWritable); err != nil {
 		panic(err)
 	}
-	site.Status = db.StatusUnknown
-	if err := s.conn.
-		Omit("ID", "LastCheck", "Status", "Details").
-		Create(site).Error; err != nil {
+	site := db.Site{
+		SiteWritable: siteWritable,
+		Status:       db.StatusUnknown,
+	}
+	if err := s.conn.Create(&site).Error; err != nil {
 		panic(err)
 	}
-	c.JSON(http.StatusOK, site)
+	c.JSON(http.StatusOK, &site)
 }
 
 func (s *Server) apiSitesIdEdit(c *gin.Context) {
-	site := &db.Site{}
-	if err := c.ShouldBindJSON(s); err != nil {
+	siteWritable := db.SiteWritable{}
+	if err := c.ShouldBindJSON(&siteWritable); err != nil {
 		panic(err)
 	}
-	site.Status = db.StatusUnknown
 	if err := s.conn.
-		Omit("ID", "LastCheck", "Status", "Details").
-		Updates(site).Error; err != nil {
+		Model(&db.Site{}).
+		Where("id = ?", c.Param("id")).
+		Updates(&siteWritable).Error; err != nil {
 		panic(err)
 	}
-	c.JSON(http.StatusOK, site)
+	c.JSON(http.StatusOK, &siteWritable)
 }
 
 func (s *Server) apiSitesIdDelete(c *gin.Context) {

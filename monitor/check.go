@@ -9,7 +9,7 @@ import (
 )
 
 type requestStatus struct {
-	Status  db.Status
+	Status  string
 	Details string
 }
 
@@ -72,7 +72,7 @@ func (m *Monitor) check(s *db.Site, now time.Time) {
 	r := doRequest(s)
 	s.Status = r.Status
 	s.Details = r.Details
-	s.LastCheck = now
+	s.LastCheck = &now
 	if err := m.conn.Save(s).Error; err != nil {
 		panic(err)
 	}
@@ -81,7 +81,7 @@ func (m *Monitor) check(s *db.Site, now time.Time) {
 	if s.Status != oldStatus {
 		if err := m.conn.Save(
 			&db.Event{
-				Time:      now,
+				Time:      &now,
 				SiteID:    s.ID,
 				OldStatus: oldStatus,
 				NewStatus: s.Status,
