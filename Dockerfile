@@ -19,11 +19,8 @@ FROM golang:alpine AS backend
 
 WORKDIR /usr/src/app
 
-# Enable cgo
-ENV CGO_ENABLED=1
-
-# Install gcc and C runtime libraries
-RUN apk --no-cache add gcc musl-dev
+# Disable cgo
+ENV CGO_ENABLED=0
 
 # Copy the package files
 COPY go.mod go.sum ./
@@ -38,7 +35,7 @@ COPY . .
 COPY --from=frontend /usr/src/app/dist/ ui/dist
 
 # Build the application
-RUN go build -ldflags '-linkmode external -extldflags "-static"'
+RUN go build
 
 
 FROM scratch
