@@ -33,6 +33,34 @@ func (s *Server) apiLogin(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+func (s *Server) apiSites(c *gin.Context) {
+	var (
+		sites = []*db.Site{}
+		conn  = s.conn.DB
+	)
+	if !s.userIsLoggedIn(c) {
+		conn = conn.Where("public = ?", true)
+	}
+	if err := conn.Find(&sites).Error; err != nil {
+		panic(err)
+	}
+	c.JSON(http.StatusOK, sites)
+}
+
+func (s *Server) apiSitesId(c *gin.Context) {
+	var (
+		site = &db.Site{}
+		conn = s.conn.DB
+	)
+	if !s.userIsLoggedIn(c) {
+		conn = conn.Where("public = ?", true)
+	}
+	if err := conn.First(site, c.Param("id")).Error; err != nil {
+		panic(err)
+	}
+	c.JSON(http.StatusOK, site)
+}
+
 func (s *Server) apiTest(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
@@ -41,6 +69,42 @@ func (s *Server) apiLogout(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete(sessionKeyUserID)
 	if err := session.Save(); err != nil {
+		panic(err)
+	}
+	c.Status(http.StatusNoContent)
+}
+
+func (s *Server) apiSitesCreate(c *gin.Context) {
+	site := &db.Site{}
+	if err := c.ShouldBindJSON(s); err != nil {
+		panic(err)
+	}
+	site.Status = db.StatusUnknown
+	if err := s.conn.
+		Omit("ID", "LastCheck", "Status", "Details").
+		Create(site).Error; err != nil {
+		panic(err)
+	}
+	c.JSON(http.StatusOK, site)
+}
+
+func (s *Server) apiSitesIdEdit(c *gin.Context) {
+	site := &db.Site{}
+	if err := c.ShouldBindJSON(s); err != nil {
+		panic(err)
+	}
+	site.Status = db.StatusUnknown
+	if err := s.conn.
+		Omit("ID", "LastCheck", "Status", "Details").
+		Updates(site).Error; err != nil {
+		panic(err)
+	}
+	c.JSON(http.StatusOK, site)
+}
+
+func (s *Server) apiSitesIdDelete(c *gin.Context) {
+	if err := s.conn.
+		Delete(&db.Site{}, c.Param("id")).Error; err != nil {
 		panic(err)
 	}
 	c.Status(http.StatusNoContent)

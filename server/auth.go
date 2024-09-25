@@ -32,3 +32,8 @@ func (s *Server) requireUser(c *gin.Context) {
 	}
 	c.Next()
 }
+
+func (s *Server) userIsLoggedIn(c *gin.Context) bool {
+	_, exists := c.Get(contextUser)
+	return exists
+}
