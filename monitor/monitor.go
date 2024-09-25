@@ -29,7 +29,10 @@ func (m *Monitor) run() {
 			return
 		}
 		for _, s := range sites {
-			n := s.LastCheck.Add(s.Interval())
+			var n time.Time
+			if s.LastCheck != nil {
+				n = s.LastCheck.Add(s.Interval())
+			}
 			if n.Before(now) {
 				m.check(s, now)
 				n = n.Add(s.Interval())

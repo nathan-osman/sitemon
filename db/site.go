@@ -36,7 +36,7 @@ type Site struct {
 // Interval returns an interval based on the current status.
 func (s *Site) Interval() time.Duration {
 	if s.Status == StatusOnline || s.OfflineInterval == 0 {
-		return time.Duration(s.OnlineInterval)
+		return time.Duration(s.OnlineInterval) * time.Second
 	}
-	return time.Duration(s.OfflineInterval)
+	return time.Duration(s.OfflineInterval) * time.Second
 }

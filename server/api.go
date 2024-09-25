@@ -89,6 +89,7 @@ func (s *Server) apiSitesCreate(c *gin.Context) {
 		panic(err)
 	}
 	c.JSON(http.StatusOK, &site)
+	s.mon.Update()
 }
 
 func (s *Server) apiSitesIdEdit(c *gin.Context) {
@@ -102,7 +103,8 @@ func (s *Server) apiSitesIdEdit(c *gin.Context) {
 		Updates(&siteWritable).Error; err != nil {
 		panic(err)
 	}
-	c.JSON(http.StatusOK, &siteWritable)
+	c.Status(http.StatusNoContent)
+	s.mon.Update()
 }
 
 func (s *Server) apiSitesIdDelete(c *gin.Context) {
@@ -111,4 +113,5 @@ func (s *Server) apiSitesIdDelete(c *gin.Context) {
 		panic(err)
 	}
 	c.Status(http.StatusNoContent)
+	s.mon.Update()
 }
