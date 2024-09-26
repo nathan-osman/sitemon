@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import App from './components/App'
+import '@fontsource/poppins/400.css'
 import './index.css'
 
 const router = createBrowserRouter([
