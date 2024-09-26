@@ -5,6 +5,7 @@ import (
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // Conn maintains a connection to the database.
@@ -31,6 +32,22 @@ func New(dataDir string) (*Conn, error) {
 	return &Conn{
 		d,
 	}, nil
+}
+
+// Transaction starts a new transaction.
+func (c *Conn) Transaction(fn func(*Conn) error) error {
+	return c.DB.Transaction(func(tx *gorm.DB) error {
+		return fn(&Conn{DB: tx})
+	})
+}
+
+// LockForUpdate locks the specified row.
+func (c *Conn) LockForUpdate(dest any, conds ...any) error {
+	return c.Clauses(
+		clause.Locking{
+			Strength: "UPDATE",
+		},
+	).First(dest, conds).Error
 }
 
 // Close closes the database connection.

@@ -34,7 +34,7 @@ func (m *Monitor) run() {
 				n = s.LastCheck.Add(s.Interval())
 			}
 			if n.Before(now) {
-				m.check(s, now)
+				m.check(s.ID, now)
 				n = n.Add(s.Interval())
 			}
 			if next.IsZero() || n.Before(next) {
