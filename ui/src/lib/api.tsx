@@ -29,7 +29,7 @@ function ApiProvider(props: PropsWithChildren) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const apiContext = {
-    isLoggedIn: false,
+    isLoggedIn,
     fetch: async function (
       input: string,
       init?: RequestInit,
@@ -57,7 +57,7 @@ function ApiProvider(props: PropsWithChildren) {
   useEffect(() => {
     apiContext.fetch("/api/test")
       .then(() => setIsLoggedIn(true))
-    //.finally(() => setIsLoading(false))
+      .finally(() => setIsLoading(false))
   }, [])
 
   return (
