@@ -19,14 +19,12 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="">
-      <div className="lg:grid lg:grid-cols-2 lg:gap-4">
-        {
-          sites.map(s => (
-            <SitePanel key={s.id} site={s} />
-          ))
-        }
-      </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {
+        sites.map(s => (
+          <SitePanel key={s.id} site={s} />
+        ))
+      }
     </div>
   )
 }

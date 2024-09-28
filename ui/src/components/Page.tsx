@@ -5,8 +5,10 @@ export default function Page() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-4">
-        <Outlet />
+      <div className="container mx-auto">
+        <div className="m-4">
+          <Outlet />
+        </div>
       </div>
     </>
   )

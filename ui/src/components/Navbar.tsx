@@ -7,13 +7,15 @@ export default function Navbar() {
 
   return (
     <div className="bg-background-panel">
-      <div className="container mx-auto py-4 flex justify-between">
-        <Link to="/" className="text-2xl">sitemon</Link>
-        {
-          api.isLoggedIn ?
-            <Link to="/logout">Logout</Link> :
-            <Link to="/login">Login</Link>
-        }
+      <div className="container mx-auto">
+        <div className="p-4 flex items-center justify-between">
+          <Link to="/" className="text-2xl">sitemon</Link>
+          {
+            api.isLoggedIn ?
+              <Link to="/logout">Logout</Link> :
+              <Link to="/login">Login</Link>
+          }
+        </div>
       </div>
     </div>
   )
