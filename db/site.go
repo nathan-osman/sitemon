@@ -5,11 +5,9 @@ import (
 )
 
 const (
-	StatusUnknown   = "unknown"
-	StatusOnline    = "online"
-	StatusError     = "error"
-	StatusTimeout   = "error_timeout"
-	StatusHTTPError = "error_http"
+	StatusUnknown = "unknown"
+	StatusOnline  = "online"
+	StatusError   = "error"
 )
 
 // SiteWritable represents the writable fields of a site.

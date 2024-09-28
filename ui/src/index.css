@@ -6,4 +6,10 @@
   --background: #f0f0f0;
   --background-panel: #ffffff;
   --foreground: #000000;
+
+  --muted: #808080;
+
+  --status-unknown: #808080;
+  --status-green: #108020;
+  --status-red: #802010;
 }

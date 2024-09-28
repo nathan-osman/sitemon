@@ -38,11 +38,6 @@ func doRequest(s *db.Site) requestStatus {
 	// Issue the request
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		if err == context.DeadlineExceeded {
-			return requestStatus{
-				Status: db.StatusTimeout,
-			}
-		}
 		return requestStatus{
 			Status:  db.StatusError,
 			Details: err.Error(),
@@ -53,7 +48,7 @@ func doRequest(s *db.Site) requestStatus {
 	// Fail on HTTP errors (unless set to ignore)
 	if resp.StatusCode >= 400 && !s.IgnoreHTTPErrors {
 		return requestStatus{
-			Status:  db.StatusHTTPError,
+			Status:  db.StatusError,
 			Details: resp.Status,
 		}
 	}

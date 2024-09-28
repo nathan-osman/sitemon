@@ -10,6 +10,10 @@ module.exports = {
         'background': 'var(--background)',
         'background-panel': 'var(--background-panel)',
         'foreground': 'var(--foreground)',
+        'muted': 'var(--muted)',
+        'status-unknown': 'var(--status-unknown)',
+        'status-green': 'var(--status-green)',
+        'status-red': 'var(--status-red)',
       }
     },
     screens: {

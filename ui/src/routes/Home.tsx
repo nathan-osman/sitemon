@@ -1,7 +1,32 @@
-
+import { useEffect, useState } from 'react'
+import { useApi } from '../lib/api'
+import SitePanel from '../components/SitePanel'
+import { SiteRead, SiteReadSchema } from '../types/site'
 
 export default function Home() {
+
+  const api = useApi()
+
+  const [sites, setSites] = useState<SiteRead[]>([])
+
+  // TODO: order by status
+
+  useEffect(() => {
+    api.fetchWithValidation(
+      SiteReadSchema.array(),
+      { url: "/api/sites" },
+    ).then(d => setSites(d))
+  }, [])
+
   return (
-    <h1>Home Page</h1>
+    <div className="">
+      <div className="lg:grid lg:grid-cols-2 lg:gap-4">
+        {
+          sites.map(s => (
+            <SitePanel key={s.id} site={s} />
+          ))
+        }
+      </div>
+    </div>
   )
 }
