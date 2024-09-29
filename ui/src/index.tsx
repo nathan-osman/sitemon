@@ -6,8 +6,8 @@ import {
 } from 'react-router-dom'
 import App from './components/App'
 import Page from './components/Page'
-import Home from './routes/Home'
-import Login from './routes/Login'
+import Home from './routes/home'
+import Login from './routes/login'
 import '@fontsource/poppins/400.css'
 import './index.css'
 
