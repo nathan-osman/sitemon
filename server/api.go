@@ -99,6 +99,10 @@ func (s *Server) apiSitesIdEdit(c *gin.Context) {
 	}
 	if err := s.conn.
 		Model(&db.Site{}).
+		Select(
+			"Name", "URL", "Public", "Enabled", "Timeout",
+			"IgnoreHTTPErrors", "OnlineInterval", "OfflineInterval",
+		).
 		Where("id = ?", c.Param("id")).
 		Updates(&siteWritable).Error; err != nil {
 		panic(err)
