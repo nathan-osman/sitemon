@@ -48,7 +48,7 @@ export default function SitesDelete() {
         {' '}
         this operation cannot be undone.
       </div>
-      <div className="mt-4">
+      <div className="my-2">
         <FormError />
       </div>
       <Button>Delete</Button>
