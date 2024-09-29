@@ -27,13 +27,16 @@ func doRequest(s *db.Site) requestStatus {
 	}
 
 	// Create the request
-	req, err := http.NewRequestWithContext(ctx, "GET", s.URL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, s.URL, nil)
 	if err != nil {
 		return requestStatus{
 			Status:  db.StatusError,
 			Details: err.Error(),
 		}
 	}
+
+	// Set the User Agent
+	req.Header.Set("User-Agent", "sitemon")
 
 	// Issue the request
 	resp, err := http.DefaultClient.Do(req)
