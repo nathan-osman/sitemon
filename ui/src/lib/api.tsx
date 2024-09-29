@@ -107,6 +107,7 @@ function useApi(): ApiContextType {
 }
 
 export {
+  LoginParams,
   ApiProvider,
   useApi,
 }
