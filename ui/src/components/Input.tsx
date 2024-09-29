@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react'
+import { ChangeEvent, InputHTMLAttributes } from 'react'
 import { useForm } from '../lib/form'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -10,6 +10,16 @@ export default function Input({ title, name, ...props }: Props) {
 
   const form = useForm()
 
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    if (props.type === "number") {
+      try {
+        form.setValue(name, parseInt(e.target.value))
+        return
+      } catch { }
+    }
+    form.setValue(name, e.target.value)
+  }
+
   return (
     <div>
       <input
@@ -18,7 +28,7 @@ export default function Input({ title, name, ...props }: Props) {
         placeholder={title}
         {...props}
         value={form.getValue(name, '')}
-        onChange={e => form.setValue(name, e.target.value)}
+        onChange={handleChange}
       />
     </div>
   )
