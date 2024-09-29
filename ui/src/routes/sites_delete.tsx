@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useApi } from '../lib/api'
+import { Form } from '../lib/form'
+import Button from '../components/Button'
+import FormError from '../components/FormError'
 import Header from '../components/Header'
 import Spinner from '../components/Spinner'
 import { SiteRead, SiteReadSchema } from '../types/site'
-import Button from '../components/Button'
+
+type DeleteParams = {}
 
 export default function SitesDelete() {
 
@@ -25,14 +29,17 @@ export default function SitesDelete() {
     return <Spinner />
   }
 
-  function handleClick() {
-    api.fetch({
+  async function handleSubmit(_: DeleteParams) {
+    return api.fetch({
+      method: 'POST',
       url: `/api/sites/${params.id}/delete`,
     }).then(() => navigate("/"))
   }
 
   return (
-    <>
+    <Form
+      onSubmit={handleSubmit}
+    >
       <Header
         title={`Delete ${site.name}?`}
       />
@@ -42,10 +49,9 @@ export default function SitesDelete() {
         this operation cannot be undone.
       </div>
       <div className="mt-4">
-        <Button
-          onClick={handleClick}
-        >Delete</Button>
+        <FormError />
       </div>
-    </>
+      <Button>Delete</Button>
+    </Form>
   )
 }
