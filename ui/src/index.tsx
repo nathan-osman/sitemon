@@ -31,6 +31,10 @@ const router = createBrowserRouter([
             element: <Home />
           },
           {
+            path: "/sites/create",
+            element: <SitesCreateEdit />,
+          },
+          {
             path: "/sites/:id/edit",
             element: <SitesCreateEdit />,
           },
