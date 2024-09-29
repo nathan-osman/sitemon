@@ -31,9 +31,12 @@ export default function SitePanel(params: Params) {
       <div className="bg-background-panel rounded-t-md px-4 py-2">
         <div className="flex justify-between">
           <div className="text-lg">{s.name}</div>
-          <div className="text-muted">
-            {formatDistance(parseISO(s.last_check), new Date())} ago
-          </div>
+          {
+            s.last_check !== null &&
+            <div className="text-muted">
+              {formatDistance(parseISO(s.last_check), new Date())} ago
+            </div>
+          }
         </div>
         {
           s.status === 'error' ?

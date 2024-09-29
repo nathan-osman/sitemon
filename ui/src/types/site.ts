@@ -15,7 +15,7 @@ export type SiteWrite = z.infer<typeof SiteWriteSchema>
 
 export const SiteReadSchema = SiteWriteSchema.extend({
   id: z.number(),
-  last_check: z.string(),
+  last_check: z.string().nullable(),
   status: z.enum([
     'unknown',
     'online',
