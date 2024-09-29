@@ -20,7 +20,10 @@ export default function Navbar() {
           <Link to="/" className="text-2xl">sitemon</Link>
           {
             api.isLoggedIn ?
-              <a href="#" onClick={logout}>Logout</a> :
+              <div className="flex gap-x-4">
+                <Link to="/sites/create">Create</Link>
+                <a href="#" onClick={logout}>Logout</a>
+              </div> :
               <Link to="/login">Login</Link>
           }
         </div>
