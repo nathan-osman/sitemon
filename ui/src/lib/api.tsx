@@ -51,9 +51,9 @@ function ApiProvider(props: PropsWithChildren) {
         init.body = JSON.stringify(params.data)
       }
       const response = await fetch(params.url, init)
-
-      // TODO: handle error from backend
-
+      if (response.status >= 400) {
+        throw new Error((await response.json()).error)
+      }
       return response
     },
     fetchWithValidation: async function <T extends z.ZodTypeAny>(
@@ -73,18 +73,21 @@ function ApiProvider(props: PropsWithChildren) {
         method: 'POST',
         data: params,
       })
+      setIsLoggedIn(true)
     },
     logout: async function () {
       await apiContext.fetch({
         url: "/api/logout",
         method: 'POST',
       })
+      setIsLoggedIn(false)
     },
   }
 
   useEffect(() => {
     apiContext.fetch({ url: "/api/test" })
       .then(() => setIsLoggedIn(true))
+      .catch(() => { })
       .finally(() => setIsLoading(false))
   }, [])
 
