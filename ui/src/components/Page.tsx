@@ -5,8 +5,8 @@ export default function Page() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto">
-        <div className="m-4">
+      <div className="container mx-auto grow flex flex-col">
+        <div className="m-4 grow">
           <Outlet />
         </div>
       </div>

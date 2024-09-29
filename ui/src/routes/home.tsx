@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useApi } from '../lib/api'
 import SitePanel from '../components/SitePanel'
+import Spinner from '../components/Spinner'
 import { SiteRead, SiteReadSchema } from '../types/site'
 
 export default function Home() {
@@ -17,6 +18,10 @@ export default function Home() {
       { url: "/api/sites" },
     ).then(d => setSites(d))
   }, [])
+
+  if (!sites.length) {
+    return <Spinner />
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

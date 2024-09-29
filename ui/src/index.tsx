@@ -8,6 +8,8 @@ import App from './components/App'
 import Page from './components/Page'
 import Home from './routes/home'
 import Login from './routes/login'
+import SitesCreateEdit from './routes/sites_create_edit'
+import SitesDelete from './routes/sites_delete'
 import '@fontsource/poppins/400.css'
 import './index.css'
 
@@ -27,7 +29,15 @@ const router = createBrowserRouter([
           {
             path: "/",
             element: <Home />
-          }
+          },
+          {
+            path: "/sites/:id/edit",
+            element: <SitesCreateEdit />,
+          },
+          {
+            path: "/sites/:id/delete",
+            element: <SitesDelete />,
+          },
         ],
       },
     ],
