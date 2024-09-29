@@ -61,36 +61,37 @@ func doRequest(s *db.Site) requestStatus {
 	}
 }
 
-func (m *Monitor) check(id int64, now time.Time) {
+func (m *Monitor) check(s *db.Site, now time.Time) {
+
+	// Grab the current status
+	oldStatus := s.Status
+
+	// Perform the request
+	r := doRequest(s)
+
+	// Start a database transaction
 	if err := m.conn.Transaction(func(c *db.Conn) error {
 
-		s := db.Site{}
-
-		// Lock the row for updating
-		if err := c.LockForUpdate(&s, id); err != nil {
-			return err
-		}
-
-		// Grab the current status
-		oldStatus := s.Status
-
-		// Perform the request and update the database
-		r := doRequest(&s)
-		s.Status = r.Status
-		s.Details = r.Details
-		s.LastCheck = &now
-		if err := c.Save(&s).Error; err != nil {
+		// Update the record
+		if err := c.
+			Model(&db.Site{}).
+			Where("id = ?", s.ID).
+			Updates(map[string]any{
+				"status":     r.Status,
+				"details":    r.Details,
+				"last_check": &now,
+			}).Error; err != nil {
 			return err
 		}
 
 		// If the status changed, create an event
-		if s.Status != oldStatus {
+		if r.Status != oldStatus {
 			if err := c.Save(
 				&db.Event{
 					Time:      &now,
 					SiteID:    s.ID,
 					OldStatus: oldStatus,
-					NewStatus: s.Status,
+					NewStatus: r.Status,
 				},
 			).Error; err != nil {
 				return err
