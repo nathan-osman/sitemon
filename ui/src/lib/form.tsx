@@ -1,4 +1,10 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react'
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
 type FormContextType = {
   submitting: boolean
@@ -10,14 +16,15 @@ type FormContextType = {
 const FormContext = createContext<FormContextType | null>(null)
 
 type Props<T> = {
+  initialValues?: T
   onSubmit: (values: T) => Promise<any>
 }
 
-function Form<T extends { [key: string]: string | boolean }>(
+function Form<T extends { [key: string]: string | number | boolean }>(
   props: PropsWithChildren<Props<T>>,
 ) {
 
-  const [values, setValues] = useState<T>({} as T)
+  const [values, setValues] = useState<T>(props.initialValues || {} as T)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
