@@ -21,7 +21,7 @@ export default function Login() {
     <div className="h-full flex items-center justify-center">
       <div className="shadow-lg">
         <Form onSubmit={handleSubmit}>
-          <div className="bg-white">
+          <div className="bg-white px-4 overflow-auto">
             <Controls>
               <div className="text-2xl mb-4">Login</div>
               <FormError />
