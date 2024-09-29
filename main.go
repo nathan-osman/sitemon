@@ -55,7 +55,10 @@ func main() {
 		After: func(c *cli.Context) error {
 
 			// Close the database connection on exit
-			c.Context.Value(contextDB).(*db.Conn).Close()
+			conn := c.Context.Value(contextDB)
+			if conn != nil {
+				conn.(*db.Conn).Close()
+			}
 			return nil
 		},
 		Commands: []*cli.Command{
