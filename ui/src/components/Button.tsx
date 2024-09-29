@@ -1,12 +1,30 @@
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { clsx } from 'clsx'
 import { useForm } from '../lib/form'
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> { }
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  to?: string
+}
 
-export default function Button(props: PropsWithChildren<Props>) {
+export default function Button(
+  { to, children, ...props }: PropsWithChildren<Props>,
+) {
 
-  const form = useForm()
+  const navigate = useNavigate()
+
+  let submitting: boolean = false
+  let adjProps = { ...props }
+
+  try {
+    submitting = useForm().submitting
+  } catch {
+    adjProps.type = "button"
+  }
+
+  if (to !== undefined) {
+    adjProps.onClick = () => navigate(to)
+  }
 
   const className = clsx(
     'bg-background-panel-button',
@@ -15,14 +33,15 @@ export default function Button(props: PropsWithChildren<Props>) {
     'border',
     'px-4',
     'py-2',
+    'hover:bg-white',
   )
 
   return (
     <button
-      disabled={form.submitting}
+      disabled={submitting}
       className={className}
-      {...props}
-    >{props.children}
+      {...adjProps}
+    >{children}
     </button>
   )
 }
