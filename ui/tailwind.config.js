@@ -9,7 +9,9 @@ module.exports = {
       colors: {
         'background': 'var(--background)',
         'background-panel': 'var(--background-panel)',
+        'background-panel-button': 'var(--background-panel-button)',
         'foreground': 'var(--foreground)',
+        'error': 'var(--error)',
         'muted': 'var(--muted)',
         'status-unknown': 'var(--status-unknown)',
         'status-green': 'var(--status-green)',

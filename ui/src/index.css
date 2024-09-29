@@ -5,8 +5,10 @@
 :root {
   --background: #f0f0f0;
   --background-panel: #ffffff;
+  --background-panel-button: #d0d0d0;
   --foreground: #000000;
 
+  --error: #802010;
   --muted: #808080;
 
   --status-unknown: #808080;
