@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useApi } from '../lib/api'
 import { Form } from '../lib/form'
 import Button from '../components/Button'
@@ -14,6 +14,7 @@ import { SiteWrite, SiteWriteSchema } from '../types/site'
 export default function SitesCreateEdit() {
 
   const api = useApi()
+  const navigate = useNavigate()
   const params = useParams()
 
   const isEdit = params.id !== undefined
@@ -38,7 +39,7 @@ export default function SitesCreateEdit() {
       method: 'POST',
       url: isEdit ? `/api/sites/${params.id}/edit` : '/api/sites/create',
       data: formParams,
-    })
+    }).then(() => navigate("/"))
   }
 
   return (
