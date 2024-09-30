@@ -1,9 +1,9 @@
 import { clsx } from 'clsx'
-import { formatDistance, parseISO } from 'date-fns'
 import { useApi } from '../lib/api'
 import ButtonGroup from './ButtonGroup'
 import { SiteRead } from '../types/site'
 import Button from './Button'
+import Time from './Time'
 
 type Params = {
   site: SiteRead
@@ -34,7 +34,7 @@ export default function SitePanel(params: Params) {
           {
             s.last_check !== null &&
             <div className="text-muted">
-              {formatDistance(parseISO(s.last_check), new Date())} ago
+              <Time date={s.last_check} />
             </div>
           }
         </div>
