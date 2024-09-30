@@ -74,6 +74,7 @@ func New(serverAddr, secretKey string, conn *db.Conn, mon *monitor.Monitor) *Ser
 		groupApi.POST("/login", s.apiLogin)
 		groupApi.GET("/sites", s.apiSites)
 		groupApi.GET("/sites/:id", s.apiSitesId)
+		groupApi.GET("/sites/:id/events", s.apiSitesIdEvents)
 
 		// Routes that require authentication
 		groupAuthApi := groupApi.Group("")
@@ -83,7 +84,6 @@ func New(serverAddr, secretKey string, conn *db.Conn, mon *monitor.Monitor) *Ser
 			groupAuthApi.POST("/logout", s.apiLogout)
 
 			groupAuthApi.POST("/sites/create", s.apiSitesCreate)
-			groupAuthApi.GET("/sites/:id/events", s.apiSitesIdEvents)
 			groupAuthApi.POST("/sites/:id/edit", s.apiSitesIdEdit)
 			groupAuthApi.POST("/sites/:id/delete", s.apiSitesIdDelete)
 		}

@@ -63,6 +63,26 @@ func (s *Server) apiSitesId(c *gin.Context) {
 	c.JSON(http.StatusOK, &site)
 }
 
+func (s *Server) apiSitesIdEvents(c *gin.Context) {
+	var (
+		events = []*db.Event{}
+		conn   = s.conn.DB
+	)
+	if !s.userIsLoggedIn(c) {
+		conn = conn.
+			Joins("Site").
+			Where("Site.public = ?", true)
+	}
+	if err := conn.
+		Where("site_id = ?", c.Param("id")).
+		Order("time desc").
+		Limit(15).
+		Find(&events).Error; err != nil {
+		panic(err)
+	}
+	c.JSON(http.StatusOK, events)
+}
+
 func (s *Server) apiTest(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
@@ -90,21 +110,6 @@ func (s *Server) apiSitesCreate(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, &site)
 	s.mon.Update()
-}
-
-func (s *Server) apiSitesIdEvents(c *gin.Context) {
-	var (
-		events = []*db.Event{}
-		conn   = s.conn.DB
-	)
-	if err := conn.
-		Where("site_id = ?", c.Param("id")).
-		Order("time desc").
-		Limit(15).
-		Find(&events).Error; err != nil {
-		panic(err)
-	}
-	c.JSON(http.StatusOK, events)
 }
 
 func (s *Server) apiSitesIdEdit(c *gin.Context) {
