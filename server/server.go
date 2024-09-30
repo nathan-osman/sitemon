@@ -83,6 +83,7 @@ func New(serverAddr, secretKey string, conn *db.Conn, mon *monitor.Monitor) *Ser
 			groupAuthApi.POST("/logout", s.apiLogout)
 
 			groupAuthApi.POST("/sites/create", s.apiSitesCreate)
+			groupAuthApi.GET("/sites/:id/events", s.apiSitesIdEvents)
 			groupAuthApi.POST("/sites/:id/edit", s.apiSitesIdEdit)
 			groupAuthApi.POST("/sites/:id/delete", s.apiSitesIdDelete)
 		}

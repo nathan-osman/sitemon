@@ -92,6 +92,21 @@ func (s *Server) apiSitesCreate(c *gin.Context) {
 	s.mon.Update()
 }
 
+func (s *Server) apiSitesIdEvents(c *gin.Context) {
+	var (
+		events = []*db.Event{}
+		conn   = s.conn.DB
+	)
+	if err := conn.
+		Where("site_id = ?", c.Param("id")).
+		Order("time desc").
+		Limit(15).
+		Find(&events).Error; err != nil {
+		panic(err)
+	}
+	c.JSON(http.StatusOK, events)
+}
+
 func (s *Server) apiSitesIdEdit(c *gin.Context) {
 	siteWritable := db.SiteWritable{}
 	if err := c.ShouldBindJSON(&siteWritable); err != nil {

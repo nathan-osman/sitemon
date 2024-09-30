@@ -92,6 +92,7 @@ func (m *Monitor) check(s *db.Site, now time.Time) {
 					SiteID:    s.ID,
 					OldStatus: oldStatus,
 					NewStatus: r.Status,
+					Details:   r.Details,
 				},
 			).Error; err != nil {
 				return err
