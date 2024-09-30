@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -87,6 +88,16 @@ func (m *Monitor) check(s *db.Site, now time.Time) {
 		// If the status changed...
 		if r.Status != oldStatus {
 
+			// ...log it
+			m.logger.Info().Msg(
+				fmt.Sprintf(
+					"status of %s changed from %s to %s",
+					s.Name,
+					oldStatus,
+					r.Status,
+				),
+			)
+
 			// ...create an event
 			if err := c.Save(
 				&db.Event{
@@ -102,10 +113,12 @@ func (m *Monitor) check(s *db.Site, now time.Time) {
 
 			// ...and send a notification (if needed)
 			if m.notifier != nil && r.Status == db.StatusError {
-				m.notifier.Send(
+				if err := m.notifier.Send(
 					s.Name,
 					r.Details,
-				)
+				); err != nil {
+					m.logger.Error().Msg(err.Error())
+				}
 			}
 		}
 
