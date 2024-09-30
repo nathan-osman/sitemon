@@ -47,7 +47,9 @@ export default function SitePanel(params: Params) {
             <div className="text-muted truncate" title={s.details}>
               {s.details}
             </div> :
-            <div className="text-muted">Online</div>
+            <div className="text-muted">
+              {s.status === 'online' ? "Online" : "Unknown"}
+            </div>
         }
       </Link>
       {
