@@ -84,8 +84,10 @@ func (m *Monitor) check(s *db.Site, now time.Time) {
 			return err
 		}
 
-		// If the status changed, create an event
+		// If the status changed...
 		if r.Status != oldStatus {
+
+			// ...create an event
 			if err := c.Save(
 				&db.Event{
 					Time:      &now,
@@ -96,6 +98,14 @@ func (m *Monitor) check(s *db.Site, now time.Time) {
 				},
 			).Error; err != nil {
 				return err
+			}
+
+			// ...and send a notification (if needed)
+			if m.notifier != nil && r.Status == db.StatusError {
+				m.notifier.Send(
+					s.Name,
+					r.Details,
+				)
 			}
 		}
 

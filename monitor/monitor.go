@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/nathan-osman/sitemon/db"
+	"github.com/nathan-osman/sitemon/notifier"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -14,6 +15,7 @@ type Monitor struct {
 	updateChan chan any
 	closedChan chan any
 	conn       *db.Conn
+	notifier   *notifier.Notifier
 }
 
 func (m *Monitor) run() {
@@ -58,12 +60,13 @@ func (m *Monitor) run() {
 }
 
 // New creates and initializes a new Monitor instance.
-func New(conn *db.Conn) *Monitor {
+func New(conn *db.Conn, n *notifier.Notifier) *Monitor {
 	m := &Monitor{
 		logger:     log.With().Str("package", "monitor").Logger(),
 		updateChan: make(chan any),
 		closedChan: make(chan any),
 		conn:       conn,
+		notifier:   n,
 	}
 	go m.run()
 	return m

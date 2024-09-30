@@ -9,6 +9,7 @@ import (
 
 	"github.com/nathan-osman/sitemon/db"
 	"github.com/nathan-osman/sitemon/monitor"
+	"github.com/nathan-osman/sitemon/notifier"
 	"github.com/nathan-osman/sitemon/server"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/term"
@@ -27,6 +28,16 @@ func main() {
 				Name:    "data-dir",
 				EnvVars: []string{"DATA_DIR"},
 				Usage:   "path to data directory",
+			},
+			&cli.StringFlag{
+				Name:    "device-token",
+				EnvVars: []string{"DEVICE_TOKEN"},
+				Usage:   "service account key for FCM",
+			},
+			&cli.StringFlag{
+				Name:    "key-file",
+				EnvVars: []string{"KEY_FILE"},
+				Usage:   "device token for FCM",
 			},
 			&cli.StringFlag{
 				Name:    "secret-key",
@@ -104,8 +115,22 @@ func main() {
 			// Grab the database
 			conn := c.Context.Value(contextDB).(*db.Conn)
 
+			// Create the notifier
+			var (
+				deviceToken = c.String("device-token")
+				keyFile     = c.String("key-file")
+				not         *notifier.Notifier
+			)
+			if deviceToken != "" && keyFile != "" {
+				n, err := notifier.New(keyFile, deviceToken)
+				if err != nil {
+					return err
+				}
+				not = n
+			}
+
 			// Create the monitor
-			mon := monitor.New(conn)
+			mon := monitor.New(conn, not)
 			defer mon.Close()
 
 			// Create the server
