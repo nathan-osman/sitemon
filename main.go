@@ -30,14 +30,9 @@ func main() {
 				Usage:   "path to data directory",
 			},
 			&cli.StringFlag{
-				Name:    "device-token",
-				EnvVars: []string{"DEVICE_TOKEN"},
-				Usage:   "service account key for FCM",
-			},
-			&cli.StringFlag{
 				Name:    "key-file",
 				EnvVars: []string{"KEY_FILE"},
-				Usage:   "device token for FCM",
+				Usage:   "service account key for FCM",
 			},
 			&cli.StringFlag{
 				Name:    "secret-key",
@@ -117,12 +112,11 @@ func main() {
 
 			// Create the notifier
 			var (
-				deviceToken = c.String("device-token")
-				keyFile     = c.String("key-file")
-				not         *notifier.Notifier
+				keyFile = c.String("key-file")
+				not     *notifier.Notifier
 			)
-			if deviceToken != "" && keyFile != "" {
-				n, err := notifier.New(keyFile, deviceToken)
+			if keyFile != "" {
+				n, err := notifier.New(keyFile)
 				if err != nil {
 					return err
 				}

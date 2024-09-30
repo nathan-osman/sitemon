@@ -10,12 +10,11 @@ import (
 
 // Notifier provides notifications via FCM.
 type Notifier struct {
-	client      *messaging.Client
-	deviceToken string
+	client *messaging.Client
 }
 
 // New creates a new Notifier instance.
-func New(keyFile, deviceToken string) (*Notifier, error) {
+func New(keyFile string) (*Notifier, error) {
 	a, err := firebase.NewApp(
 		context.Background(),
 		nil,
@@ -29,8 +28,7 @@ func New(keyFile, deviceToken string) (*Notifier, error) {
 		return nil, err
 	}
 	return &Notifier{
-		client:      c,
-		deviceToken: deviceToken,
+		client: c,
 	}, nil
 }
 
@@ -39,11 +37,11 @@ func (n *Notifier) Send(title, body string) error {
 	_, err := n.client.Send(
 		context.Background(),
 		&messaging.Message{
+			Topic: "error",
 			Notification: &messaging.Notification{
 				Title: title,
 				Body:  body,
 			},
-			Token: n.deviceToken,
 		},
 	)
 	return err
