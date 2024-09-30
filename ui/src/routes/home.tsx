@@ -8,7 +8,7 @@ export default function Home() {
 
   const api = useApi()
 
-  const [sites, setSites] = useState<SiteRead[]>([])
+  const [sites, setSites] = useState<SiteRead[] | undefined>()
 
   // TODO: order by status
 
@@ -19,7 +19,7 @@ export default function Home() {
     ).then(d => setSites(d))
   }, [])
 
-  if (!sites.length) {
+  if (sites === undefined) {
     return <Spinner />
   }
 

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { clsx } from 'clsx'
 import { useApi } from '../lib/api'
 import ButtonGroup from './ButtonGroup'
@@ -28,7 +29,10 @@ export default function SitePanel(params: Params) {
 
   return (
     <div className={className}>
-      <div className="bg-background-panel rounded-t-md px-4 py-2">
+      <Link
+        to={`/sites/${s.id}`}
+        className="block bg-background-panel rounded-t-md px-4 py-2"
+      >
         <div className="flex justify-between">
           <div className="text-lg">{s.name}</div>
           {
@@ -45,7 +49,7 @@ export default function SitePanel(params: Params) {
             </div> :
             <div className="text-muted">Online</div>
         }
-      </div>
+      </Link>
       {
         api.isLoggedIn &&
         <ButtonGroup>
