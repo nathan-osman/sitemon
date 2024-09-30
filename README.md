@@ -12,4 +12,4 @@ This tool provides a simple way to monitor a group of websites for issues and no
 
 #### Screenshots
 
-<img src="https://github.com/nathan-osman/sitemon/blob/main/img/ss-home.png?raw=true" width="420" /> &nbsp; <img src="https://github.com/nathan-osman/sitemon/blob/main/img/ss-events.png?raw=true" width="420" />
+<img src="https://github.com/nathan-osman/sitemon/blob/main/img/ss-home.png?raw=true" width="400" /> &nbsp; <img src="https://github.com/nathan-osman/sitemon/blob/main/img/ss-events.png?raw=true" width="400" />
