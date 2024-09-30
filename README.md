@@ -9,6 +9,7 @@ This tool provides a simple way to monitor a group of websites for issues and no
 - No external dependencies (uses SQLite internally)
 - Maintains a list of recent issues for each monitored site
 - Monitored sites can be marked public or private (access only to logged in users)
+- Notifications can be delivered via Firebase Cloud Messaging
 
 #### Screenshots
 
