@@ -14,8 +14,8 @@ module.exports = {
         'error': 'var(--error)',
         'muted': 'var(--muted)',
         'status-unknown': 'var(--status-unknown)',
-        'status-green': 'var(--status-green)',
-        'status-red': 'var(--status-red)',
+        'status-online': 'var(--status-online)',
+        'status-error': 'var(--status-error)',
       }
     },
     screens: {

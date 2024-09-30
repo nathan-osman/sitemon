@@ -19,9 +19,9 @@ export default function SitePanel(params: Params) {
     'rounded-t-md',
     'pt-1',
     {
-      'bg-status-unknown': s.status == 'unknown',
-      'bg-status-green': s.status == 'online',
-      'bg-status-red': s.status == 'error',
+      'bg-status-unknown': s.status === 'unknown',
+      'bg-status-online': s.status === 'online',
+      'bg-status-error': s.status === 'error',
     },
     'shadow-lg',
   )
